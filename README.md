@@ -1,0 +1,1 @@
+This project is my study on opengl with glfw and python.
