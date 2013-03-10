@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
-encoding/FullScreen.py=utf-8
-encoding/SimpleOpengl.py=utf-8
-encoding/StartWithGlfw.py=utf-8
+encoding//Primitives/line.py=utf-8
+encoding//SimpleSample/FullScreen.py=utf-8
+encoding//SimpleSample/RotateTriangle.py=utf-8
+encoding//SimpleSample/SimpleOpengl.py=utf-8
+encoding//SimpleSample/StartWithGlfw.py=utf-8
