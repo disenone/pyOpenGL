@@ -18,8 +18,9 @@ def init():
     glLoadIdentity()
     ratio = 1.0*height / width
     print ratio
-    glFrustum(-1, 1, -1*ratio, 1*ratio, 1, 50)
+    glFrustum(-1, 1, -1*ratio, 1*ratio, 1, 50)      # set the project style
     glMatrixMode(GL_MODELVIEW)
+    
     
 def drawFunc():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
