@@ -1,5 +1,7 @@
 eclipse.preferences.version=1
+encoding//ColorLightMixFog/Blender.py=utf-8
 encoding//ColorLightMixFog/Color.py=utf-8
+encoding//ColorLightMixFog/Fog.py=utf-8
 encoding//ColorLightMixFog/Light.py=utf-8
 encoding//Primitives/DrawCircle.py=utf-8
 encoding//Primitives/line.py=utf-8
