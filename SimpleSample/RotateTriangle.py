@@ -18,45 +18,41 @@ def KeyboardHandler(key, state):
 
 def Reshape(width, height):
     if(height == 0):
-        return
-#    glViewport(0, 0, width, height)
-#    glMatrixMode(GL_PROJECTION)
-#    glLoadIdentity()   
-#    ratio = 1.0*height / width
-#    glFrustum(-1, 1, -1*ratio, 1*ratio, 1, 50)      # set the project style
-#    glMatrixMode(GL_MODELVIEW)
-    
+        height = 1 
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
     gluPerspective(52.0, width/height, 1.0, 1000.0)
     glMatrixMode(GL_MODELVIEW)
     
-def Display():
+def Display(m_angle =0.0):
+    linewidth = 0.5
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)    
     glLoadIdentity()
+    gluLookAt(0.0, 0.0, 1, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
     
-    gluLookAt(0.0, 10.0, 0.0, 
-              0.0, 0.0, 0.0, 
-              0.0, 0.0, -1.0)
+    # move back 5 units and rotate about all 3 axes
+    glTranslatef(0.0, 0.0, -5.0)
+    glRotatef(m_angle, 1.0, 0.0, 0.0)
+    glRotatef(m_angle, 0.0, 1.0, 0.0)
+    glRotatef(m_angle, 0.0, 0.0, 1.0)
+    # lime greenish color
+    glColor3f(0.7, 1.0, 0.3)
+
+    # draw the triangle such that the rotation point is in the center
+    glBegin(GL_TRIANGLES)
+    glVertex3f(1.0, -1.0, 0.0)
+    glVertex3f(-1.0, -1.0, 0.0)
+    glVertex3f(0.0, 1.0, 0.0)
+    glEnd()
     
-    linewidth = 0.5
-    line = 0.0
-    while line <= 7.0:
-        glLineWidth(linewidth)
-        glBegin(GL_LINES)
-        glVertex3f(-1.0, 0.0, line-3.0)
-        glVertex3f(-5.0, 0.0, line-3.0)
-        glEnd()
-        linewidth += 0.1
-        line += 0.5
 
 def init():
     width = 640
     height = 480
     glfw.Init()
     glfw.OpenWindow(width, height, 8, 8, 8, 0, 24, 0, glfw.WINDOW)
-    glfw.SetWindowTitle("glfw line")
+    glfw.SetWindowTitle("test glfw")
     glfw.SetWindowSizeCallback(Reshape)
     glEnable(GL_DEPTH_TEST)
     # set eht projection
@@ -68,11 +64,13 @@ def init():
 
 
 init()
+m_angle = 0.0
 while(True):
-    Display()
+    Display(m_angle)
     glfw.SwapBuffers()
     if( glfw.GetKey(glfw.KEY_ESC) == glfw.GLFW_PRESS ):
         break
     time.sleep(0.02)
+    m_angle += 0.1
 
 glfw.Terminate()
