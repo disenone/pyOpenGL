@@ -53,14 +53,14 @@ def init():
     glfw.OpenWindow(width, height, 8, 8, 8, 0, 24, 0, glfw.WINDOW)
     glfw.SetWindowTitle("glfw line")
     glfw.SetWindowSizeCallback(Reshape)
+    glfw.SetMouseButtonCallback(MouseHandler)
+    glfw.SetKeyCallback(KeyboardHandler)
+    glfw.SetWindowCloseCallback(WindowCLose)
+    
     glClearColor(0.0, 0.0, 0.0, 0.0);
     glEnable(GL_DEPTH_TEST)
     glDepthFunc(GL_LEQUAL);
     
-    glfw.SetMouseButtonCallback(MouseHandler)
-    glfw.SetKeyCallback(KeyboardHandler)
-    glfw.SetWindowCloseCallback(WindowCLose)
-
 
 init()
 while(True):

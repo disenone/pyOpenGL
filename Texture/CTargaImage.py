@@ -167,6 +167,7 @@ class CTargaImage:
             self.FlipVertical()
         
         self.SwapRedBlue()
+        return True
 
     def SwapRedBlue(self):
         swap_method = {32: self.SwapRedBlue32, 24: self.SwapRedBlue24, 8: self.SwapRedBlue8,}

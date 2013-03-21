@@ -27,17 +27,10 @@ def WindowCLose():
 def Reshape(width, height):
     if(height == 0):
         height = 1
-#    glViewport(0, 0, width, height)
-#    glMatrixMode(GL_PROJECTION)
-#    glLoadIdentity()   
-#    ratio = 1.0*height / width
-#    glFrustum(-1, 1, -1*ratio, 1*ratio, 1, 50)      # set the project style
-#    glMatrixMode(GL_MODELVIEW)
     
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-#    gluPerspective(52.0, float(width)/height, 1.0, 1000.0)
     glOrtho(0.0, width - 1.0, 0.0, height - 1.0, -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
@@ -69,7 +62,7 @@ def init():
     glfw.SetWindowCloseCallback(WindowCLose)
     
     global m_tga
-    m_tga.load("opengl_logo.tga")
+    m_tga.load("rock.tga")
     m_tga_un.load("opengl_logo_un.tga")
 
 init()
