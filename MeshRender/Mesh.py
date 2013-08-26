@@ -34,7 +34,7 @@ class TextureCoord(object):
     uv = [0.0, 0.0]
     def __init__(self, u = 0.0, v=0.0):
         self.uv = [u, v]
-    def __getitem(self, i):
+    def __getitem__(self, i):
         return self.uv[i]
     def __str__(self):
         return self.uv.__str__()
@@ -61,7 +61,7 @@ class Mesh(object):
         self.radius = 0.0
         
     def LoadFromObj(self, fileName):
-        inputData = open(fileName, )
+        inputData = open(fileName)
         minXYZ = Vertex(sys.float_info.max, sys.float_info.max, sys.float_info.max)
         maxXYZ = Vertex(-sys.float_info.max, -sys.float_info.max, -sys.float_info.max)
         for line in inputData:
@@ -80,20 +80,21 @@ class Mesh(object):
                 uv = [0,0,0]
                 for i in range(2):
                     uv[i] = float(words[i+1])
+                uv[1] = 1-uv[1]
                 self.textureCoords.append(TextureCoord(uv[0], uv[1]))
             elif words[0] == 'f':
                 face = [0,0,0,0]
                 if(len(words) == 4):
                     for i in range(0, 3):
                         splitIds = words[i+1].split('/')
-                        face[i] = int(splitIds[0])
-                        self.vertexs[face[i]].textureId = int(splitIds[1])
+                        face[i] = int(splitIds[0]) - 1
+                        self.vertexs[face[i]].textureId = int(splitIds[1])-1
                     self.faces.append(TriFace(face[0], face[1], face[2]))
                 elif(len(words) == 5):
                     for i in range(0, 4):
                         splitIds = words[i+1].split('/')
                         face[i] = int(splitIds[0]) - 1
-                        self.vertexs[face[i]].textureId = int(splitIds[1])
+                        self.vertexs[face[i]].textureId = int(splitIds[1])-1
                     self.faces.append(TriFace(face[0], face[1], face[2]))
                     self.faces.append(TriFace(face[0], face[2], face[3]))
             else:
