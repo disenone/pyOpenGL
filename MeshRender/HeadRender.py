@@ -6,7 +6,7 @@ from OpenGL.GLU import *
 import glfw
 import time
 from Mesh import Mesh
-    
+
 def MouseHandler(button, state):
     if(button == glfw.MOUSE_BUTTON_RIGHT):
         exit(0)
@@ -34,18 +34,25 @@ def Reshape(width, height):
     glViewport(0, 0, width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(52.0, float(width)/height, 1.0, 1000.0)
+    gluOrtho2D(0.0, 10.0, 0.0, 10.0);
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     
-def Render():
+def Render(mesh = Mesh()):
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)    
     glLoadIdentity()
+        
+    gluLookAt(mesh.center[0], mesh.center[1], mesh.center[2] + mesh.radius, 
+              mesh.center[0], mesh.center[1], mesh.center[2], 
+              mesh.center[0], mesh.center[1] + mesh.radius, mesh.center[2])
     
-    gluLookAt(0.0, 12.0, 0.0, 
-              0.0, 0.0, 0.0, 
-              0.0, 0.0, -1.0)
-
+    glColor3f(1.0, 0.0, 0.5)
+    
+    glBegin(GL_TRIANGLES)
+    for i in range(len(mesh.faces)):
+        for j in range(3):
+            glVertex3f(mesh.vertexs[mesh.faces[i][j]].pos[0], mesh.vertexs[mesh.faces[i][j]].pos[1], mesh.vertexs[mesh.faces[i][j]].pos[2])   
+    glEnd()
 
 def init():
     width = 640
@@ -63,25 +70,25 @@ def init():
     glDepthFunc(GL_LEQUAL);
     
     
-def LoadObj():
+def LoadObj(fileName):
     mesh = Mesh()
-    mesh.LoadFromObj('head.obj')
-
-    print len(mesh.vertexs)
-    for vertex in mesh.vertexs:
-        print str(vertex.pos[0]) + ' ' + str(vertex.pos[1]) + ' ' + str(vertex.pos[2])
-    print len(mesh.faces)
-    for face in mesh.faces:
-        print str(face[0])
-    
-    print len(mesh.textureCoords)
+    mesh.LoadFromObj(fileName)
+    return mesh
+#    print len(mesh.vertexs)
+#    for vertex in mesh.vertexs:
+#        print str(vertex.pos[0]) + ' ' + str(vertex.pos[1]) + ' ' + str(vertex.pos[2])
+#    print len(mesh.faces)
+#    for face in mesh.faces:
+#        print str(face[0])
+#    print len(mesh.textureCoords)
         
         
 init()
-LoadObj()
-
+mesh = LoadObj('head.obj')
+print mesh.center
+print mesh.radius
 while(True):
-    Render()
+    Render(mesh)
     glfw.SwapBuffers()
     if( glfw.GetKey(glfw.KEY_ESC) == glfw.GLFW_PRESS ):
         break
