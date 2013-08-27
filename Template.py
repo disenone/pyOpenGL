@@ -5,6 +5,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 import glfw
 import time
+import __main__
     
 def MouseHandler(button, state):
     if(button == glfw.MOUSE_BUTTON_RIGHT):
@@ -61,14 +62,14 @@ def init():
     glEnable(GL_DEPTH_TEST)
     glDepthFunc(GL_LEQUAL);
     
-
-init()
-while(True):
-    Render()
-    glfw.SwapBuffers()
-    if( glfw.GetKey(glfw.KEY_ESC) == glfw.GLFW_PRESS ):
-        break
-    time.sleep(0.02)
-
-glfw.Terminate()
+if __name__ == '__main__':
+    init()
+    while(True):
+        Render()
+        glfw.SwapBuffers()
+        if( glfw.GetKey(glfw.KEY_ESC) == glfw.GLFW_PRESS ):
+            break
+        time.sleep(0.02)
+    
+    glfw.Terminate()
 

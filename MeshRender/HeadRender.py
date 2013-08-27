@@ -3,11 +3,12 @@
 
 from OpenGL.GL import *
 from OpenGL.GLU import *
-import Image
+from Image import *
 import glfw
 import time
 import numpy
 from Mesh import Mesh
+from Converter import *
 
 def MouseHandler(button, state):
     if(button == glfw.MOUSE_BUTTON_RIGHT):
@@ -138,6 +139,13 @@ def DrawTriangle():
     glVertex3f(0, 50, 0)
     glEnd()
 
+def CaptureOpenGLImage():
+    viewPort = glGetIntegerv(GL_VIEWPORT)
+    arrayImg = glReadPixels(viewPort[0], viewPort[1], viewPort[2], viewPort[3], GL_RGB, GL_UNSIGNED_BYTE)
+    image = Image.frombuffer('RGB', (viewPort[2], viewPort[3]), arrayImg, 'raw', 'RGB', 0, 1)
+    image = image.transpose(Image.FLIP_TOP_BOTTOM)
+    return image
+
 def LoadObj(fileName):
     mesh = Mesh()
     mesh.LoadFromObj(fileName)
@@ -149,46 +157,48 @@ def LoadObj(fileName):
     for face in mesh.faces:
         print str(face[0])
     print len(mesh.textureCoords)
-        
-def PIL2array(img):
-    return numpy.array(img.getdata(),
-                    numpy.uint8).reshape(img.size[1], img.size[0], 3)
 
-def array2PIL(arr, size):
-    mode = 'RGB'
-    #arr = arr.reshape(arr.shape[0]*arr.shape[1], arr.shape[2])
-    if len(arr[0]) == 3:
-        arr = numpy.c_[arr, 255*numpy.ones((len(arr),1), numpy.uint8)]
-    return Image.frombuffer(mode, size, arr.tostring(), 'raw', mode, 0, 1)
 
-        
-mesh = LoadObj('head.obj')
-print mesh.center
-print mesh.radius
-print len(mesh.textureCoords)
-print len(mesh.faces)
-textureImg = Image.Image()
-textureImg = Image.open('fit.jpg')
-textureHandle = None
-arr = PIL2array(textureImg)
-print arr.size
-img2 = array2PIL(arr, textureImg.size)
-img2.save('fit2.jpg')
-print textureImg.format
-print textureImg.size
-print textureImg.size[0], textureImg.size[1]
-print textureImg.info
-print textureImg.getdata()
-print textureImg.mode
-angle = 0.0
-init()
-while(True):
+if __name__ == '__main__':
+    mesh = LoadObj('head.obj')
+    print mesh.center
+    print mesh.radius
+    print len(mesh.textureCoords)
+    print len(mesh.faces)
+    textureImg = Image.Image()
+    textureImg = Image.open('fit.jpg')
+    textureHandle = None
+    arr = PIL2array(textureImg)
+    print arr.size
+    img2 = array2PIL(arr, textureImg.size)
+    img2.save('fit2.jpg')
+    print textureImg.format
+    print textureImg.size
+    print textureImg.size[0], textureImg.size[1]
+    print textureImg.info
+    print list(textureImg.getdata())[0]
+    print textureImg.mode
+    angle = 0
+    init()
     Render(mesh, textureImg, angle)
     glfw.SwapBuffers()
-    if( glfw.GetKey(glfw.KEY_ESC) == glfw.GLFW_PRESS ):
-        break
-    time.sleep(0.02)
-    angle += 1
-
-glfw.Terminate()
+    
+    endFlag = 361
+    angleChange = {0:30, 30:-30, -30:endFlag}
+    while(True):
+        Render(mesh, textureImg, angle)
+        glfw.SwapBuffers()
+        if( glfw.GetKey(glfw.KEY_ESC) == glfw.GLFW_PRESS ):
+            break
+        time.sleep(0.02)
+        if(angleChange.get(angle) != None):
+            captureImage = CaptureOpenGLImage()
+            captureImage.save('capture_' + str(angle) +'.jpg')
+            angle = angleChange[angle]
+            if(angle == endFlag):
+                print 'end'
+                glfw.Terminate()
+                exit(0)
+    
+    glfw.Terminate()
 
