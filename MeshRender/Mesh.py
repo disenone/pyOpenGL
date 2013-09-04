@@ -18,7 +18,8 @@ class Vertex(object):
     def __setitem__(self, i, xyz):
         self.pos[i] = xyz
     def __str__(self):
-        return str(self.pos[0]) + ' ' + str(self.pos[1]) + ' ' + str(self.pos[2])
+        return str(self.pos[0]) + ' ' + str(self.pos[1]) + ' ' + \
+                str(self.pos[2]) +' ' +str(self.textureId)
     
     
 class TriFace(object):
@@ -89,7 +90,7 @@ class Mesh(object):
                         splitIds = words[i+1].split('/')
                         face[i] = int(splitIds[0]) - 1
                         self.vertexs[face[i]].textureId = int(splitIds[1])-1
-                    self.faces.append(TriFace(face[0], face[1], face[2]))
+                    self.faces.append(TriFace(face[2], face[1], face[0]))
                 elif(len(words) == 5):
                     for i in range(0, 4):
                         splitIds = words[i+1].split('/')
