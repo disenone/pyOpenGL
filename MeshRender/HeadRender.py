@@ -198,7 +198,7 @@ if __name__ == '__main__':
             if(angle == endFlag):
                 print 'end'
                 glfw.Terminate()
-                exit(0)
+                exit(0) 
     
     glfw.Terminate()
 
